@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coreoflore - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #00c6ff, 0 0 20px #00c6ff, 0 0 30px #00c6ff; }
+            50% { text-shadow: 0 0 20px #00c6ff, 0 0 30px #00c6ff, 0 0 40px #00c6ff; }
+        }
+        @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712; /* gray-950 */
+            color: #d1d5db;
+            overflow-x: hidden;
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .animate-glow { animation: glow 4s ease-in-out infinite; }
+        
+        /* Name hover effect */
+        .name-effect {
+            transition: text-shadow 0.3s ease, color 0.3s ease;
+        }
+        .name-effect:hover {
+            color: #93c5fd; /* light blue */
+            text-shadow: 0 0 15px #3b82f6, 0 0 25px #3b82f6;
+        }
+
+        /* Typing cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #00c6ff;
+            margin-left: 8px;
+            animation: cursor-blink 1s infinite;
+            box-shadow: 0 0 5px #00c6ff;
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+            font-weight: 600;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+            border-bottom-color: #3b82f6;
+        }
+        .nav-link.nav-special {
+            background-color: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border-bottom: none;
+        }
+        .nav-link.nav-special:hover, .nav-link.nav-special.active {
+            background-color: #2563eb;
+            border-bottom-color: transparent;
+        }
+        .home-social-icon {
+            color: #9ca3af;
+            transition: all 0.3s ease;
+        }
+        .home-social-icon:hover {
+            color: #00c6ff;
+            transform: scale(1.1);
+        }
+        .game-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            background-color: #111827;
+        }
+        .game-card:hover {
+            transform: translateY(-10px);
+            border-color: #3b82f6;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+        .game-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .game-card:hover img {
+            opacity: 1;
+        }
+        .game-card-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            padding: 16px;
+            font-weight: bold;
+            font-size: 1.25rem;
+            text-align: center;
+        }
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .modal-backdrop.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background-color: #111827;
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid #3b82f6;
+            color: white;
+            text-align: center;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-backdrop.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-close-button {
+            margin-top: 1.5rem;
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .modal-close-button:hover { background-color: #2563eb; }
+        .chat-input {
+            flex-grow: 1; padding: 0.75rem; border-radius: 8px; border: 1px solid #374151;
+            background-color: #1f2937; color: white; outline: none; transition: border-color 0.3s ease;
+        }
+        .chat-input:focus { border-color: #3b82f6; }
+        .send-button {
+            background-color: #3b82f6; color: white; font-weight: bold; padding: 0.75rem 1.25rem;
+            border-radius: 8px; transition: background-color 0.3s ease;
+        }
+        .send-button:hover { background-color: #2563eb; }
+        .send-button:disabled { background-color: #374151; cursor: not-allowed; }
+        .chat-message { max-width: 80%; padding: 0.75rem 1rem; border-radius: 1rem; line-height: 1.5; display: flex; }
+        .ai-message { background-color: #1f2937; color: #d1d5db; align-self: flex-start; border-bottom-left-radius: 0.25rem; }
+        .user-message { background-color: #3b82f6; color: white; align-self: flex-end; margin-left: auto; border-bottom-right-radius: 0.25rem; }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- Live Background Canvas -->
+    <canvas id="live-background" class="fixed top-0 left-0 w-full h-full z-0"></canvas>
+
+    <!-- Fixed Navigation Bar -->
+    <nav class="bg-black/20 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+                <a href="#home" class="text-3xl font-bold text-white font-orbitron tracking-widest">COREOFLORE</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#games" class="nav-link">My Games</a>
+                    <a href="#about" class="nav-link">About Me</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                    <a href="#ai-chat" class="nav-link nav-special">AI Assistant</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="relative z-10 flex items-center justify-center h-screen">
+        <div class="text-center">
+            <h1 id="name-heading" class="text-6xl md:text-8xl font-bold text-white font-orbitron" data-text="COREOFLORE"></h1>
+            <div class="mt-12 flex justify-center space-x-8">
+                <a href="https://www.instagram.com/core0flore" target="_blank" class="home-social-icon" aria-label="Instagram"><i class="fab fa-instagram fa-3x"></i></a>
+                <a href="https://discordapp.com/users/762256902025248768" target="_blank" class="home-social-icon" aria-label="Discord"><i class="fab fa-discord fa-3x"></i></a>
+                <a href="https://www.youtube.com/@COreoflre" target="_blank" class="home-social-icon" aria-label="YouTube"><i class="fab fa-youtube fa-3x"></i></a>
+                <a href="https://steamcommunity.com/profiles/76561199083735531" target="_blank" class="home-social-icon" aria-label="Steam"><i class="fab fa-steam fa-3x"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- My Games Section -->
+    <section id="games" class="relative z-10 py-20 scroll-mt-16">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl font-bold text-center text-white font-orbitron mb-12">MY GAMING ARSENAL</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="game-card" onclick="openModal('War Thunder', 'CoreOfLore#1', '700 Hours+', 'Playing for 3 years')">
+                    <img src="https://cdn.akamai.steamstatic.com/steam/apps/236390/header.jpg" alt="War Thunder">
+                    <div class="game-card-title">War Thunder</div>
+                </div>
+                <div class="game-card" onclick="openModal('World of Tanks Blitz', '[Redacted]', '1500 Hours+', 'Playing for 8 years')">
+                    <img src="https://cdn.akamai.steamstatic.com/steam/apps/444200/header.jpg" alt="World of Tanks Blitz">
+                    <div class="game-card-title">World of Tanks Blitz</div>
+                </div>
+                <div class="game-card" onclick="openModal('Valorant', 'coreoflore#4005', 'Unknown', 'Playing for 3 years')">
+                    <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/co2mvt.jpg" alt="Valorant">
+                    <div class="game-card-title">Valorant</div>
+                </div>
+                <div class="game-card" onclick="openModal('Elden Ring', 'coreoflore', 'Entire Life', 'Playing from birth')">
+                    <img src="https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg" alt="Elden Ring">
+                    <div class="game-card-title">Elden Ring</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="relative z-10 py-20 scroll-mt-16">
+        <div class="container mx-auto px-6">
+            <div class="bg-gray-900/50 backdrop-blur-md p-8 rounded-lg max-w-4xl mx-auto border border-gray-700">
+                <h1 class="text-4xl font-bold text-center text-white font-orbitron mb-8">ABOUT ME</h1>
+                <p class="text-lg leading-relaxed text-gray-300">
+                    I'm a BCA student and a massive tank enthusiast—there's just something about historical armor that fascinates me. I absolutely love cats, and I firmly believe that the beauty of space is unparalleled here on Earth. When I'm not studying or gaming, you can usually find me listening to a mix of artists like Akon, 1nonly, and Bill Withers.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="relative z-10 py-20 scroll-mt-16">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl font-bold text-white font-orbitron mb-4">CONNECT WITH ME</h1>
+            <p class="text-lg text-gray-400 mb-8">Find me on these platforms</p>
+            <div class="mt-8 flex justify-center space-x-8">
+                <a href="https://www.instagram.com/core0flore" target="_blank" class="home-social-icon" aria-label="Instagram"><i class="fab fa-instagram fa-3x"></i></a>
+                <a href="https://discordapp.com/users/762256902025248768" target="_blank" class="home-social-icon" aria-label="Discord"><i class="fab fa-discord fa-3x"></i></a>
+                <a href="https://www.youtube.com/@COreoflre" target="_blank" class="home-social-icon" aria-label="YouTube"><i class="fab fa-youtube fa-3x"></i></a>
+                <a href="https://steamcommunity.com/profiles/76561199083735531" target="_blank" class="home-social-icon" aria-label="Steam"><i class="fab fa-steam fa-3x"></i></a>
+            </div>
+             <div class="mt-12 text-lg text-gray-400">
+                <p>Or drop me an email at:</p>
+                <a href="#" onclick="alert('Just kidding! Trying to keep the spam bots away.'); return false;" class="text-xl text-blue-400 hover:text-blue-300 font-orbitron">[REDACTED]@not-a-real-email.com</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chat Section -->
+    <section id="ai-chat" class="relative z-10 py-20 scroll-mt-16">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-orbitron text-amber-400">IN DEVELOPMENT</h2>
+                <p class="text-gray-400">The AI Assistant is currently offline pending an API key.</p>
+            </div>
+            <div class="bg-gray-900/50 backdrop-blur-md p-4 sm:p-6 md:p-8 rounded-xl shadow-lg border border-blue-500/20 max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-white font-orbitron mb-2">AI ASSISTANT</h2>
+                <p class="text-center text-gray-400 mb-6">Powered by the Gemini API</p>
+                <div id="chat-container" class="flex flex-col h-[60vh]">
+                    <div id="chat-messages" class="flex-grow p-4 space-y-4 overflow-y-auto rounded-t-lg bg-black/20">
+                        <div class="chat-message ai-message">
+                            <p class="message-text">Greetings. I am an AI assistant integrated into this portfolio. How may I help you?</p>
+                        </div>
+                    </div>
+                    <div id="thinking-indicator" class="p-4 text-center text-gray-400 hidden">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>AI is thinking...
+                    </div>
+                    <div class="p-4 bg-black/20 rounded-b-lg border-t border-blue-500/20">
+                        <form id="chat-form" class="flex items-center space-x-4">
+                            <input type="text" id="chat-input" placeholder="AI is currently offline..." class="chat-input" autocomplete="off" disabled>
+                            <button type="submit" id="send-button" class="send-button" disabled>
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Stats Modal -->
+    <div id="gameModal" class="modal-backdrop">
+        <div class="modal-content">
+            <h2 id="modalTitle" class="text-3xl font-bold font-orbitron mb-4"></h2>
+            <div class="space-y-3 text-lg">
+                <p><strong>In-Game Name:</strong> <span id="modalIGN"></span></p>
+                <p><strong>Total Hours:</strong> <span id="modalHours"></span></p>
+                <p><strong>Playing For:</strong> <span id="modalDuration"></span></p>
+            </div>
+            <button onclick="closeModal()" class="modal-close-button">Close</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Live Background Effect ---
+            let scene, camera, renderer, points;
+            const container = document.getElementById('live-background');
+            function initBackground() {
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.z = 50;
+                renderer = new THREE.WebGLRenderer({ canvas: container, alpha: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                const geometry = new THREE.BufferGeometry();
+                const vertices = [];
+                const numPoints = 500;
+                for (let i = 0; i < numPoints; i++) {
+                    vertices.push((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100);
+                }
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                const material = new THREE.PointsMaterial({ color: 0x00c6ff, size: 0.2, transparent: true });
+                points = new THREE.Points(geometry, material);
+                scene.add(points);
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+                document.addEventListener('mousemove', (event) => {
+                    const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                    camera.position.x += (mouseX * 5 - camera.position.x) * 0.02;
+                    camera.position.y += (mouseY * 5 - camera.position.y) * 0.02;
+                    camera.lookAt(scene.position);
+                });
+            }
+            function animateBackground() {
+                requestAnimationFrame(animateBackground);
+                points.rotation.y += 0.0005;
+                renderer.render(scene, camera);
+            }
+            initBackground();
+            animateBackground();
+
+            // --- Name Typing Effect ---
+            const nameEl = document.getElementById('name-heading');
+            const nameText = nameEl.getAttribute('data-text');
+            let i = 0;
+            nameEl.innerHTML = ''; // Clear initial content
+            const cursorSpan = document.createElement('span');
+            cursorSpan.className = 'typing-cursor';
+
+            function typeWriter() {
+                if (i < nameText.length) {
+                    nameEl.textContent += nameText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 150);
+                } else {
+                    nameEl.appendChild(cursorSpan);
+                    setTimeout(() => {
+                        if(cursorSpan) cursorSpan.style.display = 'none';
+                        nameEl.classList.add('animate-glow', 'name-effect');
+                    }, 2000); // Keep cursor for 2 seconds
+                }
+            }
+            setTimeout(typeWriter, 500); // Start after a short delay
+
+            // --- Game Modal ---
+            const modal = document.getElementById('gameModal');
+            window.openModal = function(title, ign, hours, duration) {
+                document.getElementById('modalTitle').innerText = title;
+                document.getElementById('modalIGN').innerText = ign;
+                document.getElementById('modalHours').innerText = hours;
+                document.getElementById('modalDuration').innerText = duration;
+                modal.classList.add('visible');
+            }
+            window.closeModal = function() {
+                modal.classList.remove('visible');
+            }
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- AI Chat (Disabled Logic) ---
+            const chatForm = document.getElementById('chat-form');
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // This alert is a placeholder since the chat is disabled.
+                alert('AI Assistant is currently in development.');
+            });
+            
+            // --- Active Nav Link on Scroll ---
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const observer = new IntersectionObserver((entries) => {
+                let activeId = '';
+                const visibleSections = entries
+                    .filter(entry => entry.isIntersecting)
+                    .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+                if (visibleSections.length > 0) {
+                    activeId = visibleSections[0].target.id;
+                }
+                
+                navLinks.forEach(link => {
+                    let linkHref = link.getAttribute('href');
+                    if (linkHref === '#' + activeId) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+
+            }, { rootMargin: '-40% 0px -60% 0px', threshold: 0 });
+
+            sections.forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>
