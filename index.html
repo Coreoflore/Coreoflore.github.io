@@ -273,7 +273,9 @@
     <nav class="bg-black/20 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
         <div class="container mx-auto px-6">
             <div class="flex items-center justify-between h-16">
-                <a href="#home" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="text-3xl font-bold text-white font-orbitron tracking-widest">COREOFLORE</a>
+                <a href="#home" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="text-2xl md:text-3xl font-bold text-white font-orbitron tracking-widest">COREOFLORE</a>
+                
+                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#home" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link">Home</a>
                     <a href="#games" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link">My Games</a>
@@ -282,16 +284,35 @@
                     <a href="#contact" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link">Contact</a>
                     <a href="#ai-chat" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link nav-special">AI Assistant</a>
                 </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" onclick="playClickSound()" class="text-white text-2xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-16 left-0 w-full bg-gray-900/90 backdrop-blur-lg">
+            <div class="flex flex-col items-center space-y-6 py-8">
+                <a href="#home" class="text-xl nav-link mobile-nav-link">Home</a>
+                <a href="#games" class="text-xl nav-link mobile-nav-link">My Games</a>
+                <a href="#about" class="text-xl nav-link mobile-nav-link">About Me</a>
+                <a href="#skills" class="text-xl nav-link mobile-nav-link">My Skills</a>
+                <a href="#contact" class="text-xl nav-link mobile-nav-link">Contact</a>
+                <a href="#ai-chat" class="text-xl nav-link mobile-nav-link">AI Assistant</a>
             </div>
         </div>
     </nav>
 
     <!-- Home Section -->
     <section id="home" class="relative z-10 flex items-center justify-center h-screen">
-        <div class="text-center">
+        <div class="text-center px-4">
             <img src="somethingnew.jpg" alt="Profile Picture" id="profile-pic" class="profile-picture mx-auto mb-8">
-            <h1 id="name-heading" class="text-6xl md:text-8xl font-bold text-white font-orbitron" data-text="COREOFLORE"></h1>
-            <div class="mt-12 flex justify-center space-x-8">
+            <h1 id="name-heading" class="text-5xl md:text-8xl font-bold text-white font-orbitron" data-text="COREOFLORE"></h1>
+            <div class="mt-12 flex justify-center space-x-6 md:space-x-8">
                 <a href="https://www.instagram.com/core0flore" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="Instagram"><i class="fab fa-instagram fa-3x"></i></a>
                 <a href="https://discordapp.com/users/762256902025248768" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="Discord"><i class="fab fa-discord fa-3x"></i></a>
                 <a href="https://www.youtube.com/@COreoflre" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="YouTube"><i class="fab fa-youtube fa-3x"></i></a>
@@ -511,13 +532,49 @@
                     camera.updateProjectionMatrix();
                     renderer.setSize(window.innerWidth, window.innerHeight);
                 });
-                document.addEventListener('mousemove', (event) => {
-                    const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                    const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-                    camera.position.x += (mouseX * 5 - camera.position.x) * 0.02;
-                    camera.position.y += (mouseY * 5 - camera.position.y) * 0.02;
+                
+                // Gyroscope controls for mobile
+                function handleOrientation(event) {
+                    // Normalize beta and gamma values to a range (e.g., -1 to 1)
+                    let beta = event.beta; // Range: -180 to 180 (front/back tilt)
+                    let gamma = event.gamma; // Range: -90 to 90 (left/right tilt)
+
+                    // Clamp values to a reasonable range to avoid extreme jumps
+                    beta = Math.max(-90, Math.min(90, beta));
+                    gamma = Math.max(-90, Math.min(90, gamma));
+
+                    const targetX = (gamma / 90) * 10;
+                    const targetY = (beta / 90) * 10;
+
+                    camera.position.x += (targetX - camera.position.x) * 0.02;
+                    camera.position.y += (targetY - camera.position.y) * 0.02;
                     camera.lookAt(scene.position);
-                });
+                }
+
+                if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    // iOS 13+
+                    container.addEventListener('click', () => {
+                        DeviceOrientationEvent.requestPermission()
+                            .then(permissionState => {
+                                if (permissionState === 'granted') {
+                                    window.addEventListener('deviceorientation', handleOrientation);
+                                }
+                            })
+                            .catch(console.error);
+                    }, { once: true });
+                } else if (window.DeviceOrientationEvent) {
+                    // Other devices
+                    window.addEventListener('deviceorientation', handleOrientation);
+                } else {
+                    // Fallback to mouse controls if no gyroscope
+                    document.addEventListener('mousemove', (event) => {
+                        const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                        const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                        camera.position.x += (mouseX * 5 - camera.position.x) * 0.02;
+                        camera.position.y += (mouseY * 5 - camera.position.y) * 0.02;
+                        camera.lookAt(scene.position);
+                    });
+                }
             }
             function animateBackground() {
                 requestAnimationFrame(animateBackground);
@@ -582,6 +639,22 @@
                 alert('AI Assistant is currently in development.');
             });
             
+            // --- Mobile Menu ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    playClickSound();
+                });
+            });
+
             // --- Active Nav Link on Scroll ---
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
