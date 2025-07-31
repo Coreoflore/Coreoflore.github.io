@@ -533,48 +533,14 @@
                     renderer.setSize(window.innerWidth, window.innerHeight);
                 });
                 
-                // Gyroscope controls for mobile
-                function handleOrientation(event) {
-                    // Normalize beta and gamma values to a range (e.g., -1 to 1)
-                    let beta = event.beta; // Range: -180 to 180 (front/back tilt)
-                    let gamma = event.gamma; // Range: -90 to 90 (left/right tilt)
-
-                    // Clamp values to a reasonable range to avoid extreme jumps
-                    beta = Math.max(-90, Math.min(90, beta));
-                    gamma = Math.max(-90, Math.min(90, gamma));
-
-                    const targetX = (gamma / 90) * 10;
-                    const targetY = (beta / 90) * 10;
-
-                    camera.position.x += (targetX - camera.position.x) * 0.02;
-                    camera.position.y += (targetY - camera.position.y) * 0.02;
+                // Mouse controls for all devices
+                document.addEventListener('mousemove', (event) => {
+                    const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                    camera.position.x += (mouseX * 10 - camera.position.x) * 0.05;
+                    camera.position.y += (mouseY * 10 - camera.position.y) * 0.05;
                     camera.lookAt(scene.position);
-                }
-
-                if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                    // iOS 13+
-                    container.addEventListener('click', () => {
-                        DeviceOrientationEvent.requestPermission()
-                            .then(permissionState => {
-                                if (permissionState === 'granted') {
-                                    window.addEventListener('deviceorientation', handleOrientation);
-                                }
-                            })
-                            .catch(console.error);
-                    }, { once: true });
-                } else if (window.DeviceOrientationEvent) {
-                    // Other devices
-                    window.addEventListener('deviceorientation', handleOrientation);
-                } else {
-                    // Fallback to mouse controls if no gyroscope
-                    document.addEventListener('mousemove', (event) => {
-                        const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                        const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-                        camera.position.x += (mouseX * 5 - camera.position.x) * 0.02;
-                        camera.position.y += (mouseY * 5 - camera.position.y) * 0.02;
-                        camera.lookAt(scene.position);
-                    });
-                }
+                });
             }
             function animateBackground() {
                 requestAnimationFrame(animateBackground);
