@@ -117,7 +117,7 @@
         }
         .game-card img {
             width: 100%;
-            height: 100%;
+            height: 140px; 
             object-fit: cover;
             opacity: 0.8;
             transition: opacity 0.3s ease;
@@ -172,8 +172,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -187,28 +187,67 @@
             pointer-events: auto;
         }
         .modal-content {
+            position: relative;
             background-color: #111827;
-            padding: 2rem;
             border-radius: 8px;
-            border: 1px solid #3b82f6;
             color: white;
-            text-align: center;
+            width: 90%;
+            max-width: 960px;
             transform: scale(0.95);
             transition: transform 0.3s ease;
+            overflow: hidden;
         }
         .modal-backdrop.visible .modal-content {
             transform: scale(1);
         }
-        .modal-close-button {
-            margin-top: 1.5rem;
-            background-color: #3b82f6;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
+        .modal-video-container {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background-color: #000;
         }
-        .modal-close-button:hover { background-color: #2563eb; }
+        .modal-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .modal-details-wrapper {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(17, 24, 39, 1) 30%, rgba(17, 24, 39, 0.7) 70%, transparent);
+            padding: 4rem 1.5rem 1.5rem 1.5rem;
+        }
+        .modal-details {
+            text-align: center;
+        }
+        .modal-close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 110;
+        }
+        .modal-close-button:hover { 
+            background-color: white;
+            color: black;
+            transform: rotate(90deg);
+        }
         .chat-input {
             flex-grow: 1; padding: 0.75rem; border-radius: 8px; border: 1px solid #374151;
             background-color: #1f2937; color: white; outline: none; transition: border-color 0.3s ease;
@@ -234,14 +273,14 @@
     <nav class="bg-black/20 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
         <div class="container mx-auto px-6">
             <div class="flex items-center justify-between h-16">
-                <a href="#home" class="text-3xl font-bold text-white font-orbitron tracking-widest">COREOFLORE</a>
+                <a href="#home" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="text-3xl font-bold text-white font-orbitron tracking-widest">COREOFLORE</a>
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="nav-link">Home</a>
-                    <a href="#games" class="nav-link">My Games</a>
-                    <a href="#about" class="nav-link">About Me</a>
-                    <a href="#skills" class="nav-link">My Skills</a>
-                    <a href="#contact" class="nav-link">Contact</a>
-                    <a href="#ai-chat" class="nav-link nav-special">AI Assistant</a>
+                    <a href="#home" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link">Home</a>
+                    <a href="#games" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link">My Games</a>
+                    <a href="#about" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link">About Me</a>
+                    <a href="#skills" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link">My Skills</a>
+                    <a href="#contact" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link">Contact</a>
+                    <a href="#ai-chat" onmouseover="debouncedHoverSound()" onclick="playClickSound()" class="nav-link nav-special">AI Assistant</a>
                 </div>
             </div>
         </div>
@@ -253,10 +292,10 @@
             <img src="somethingnew.jpg" alt="Profile Picture" id="profile-pic" class="profile-picture mx-auto mb-8">
             <h1 id="name-heading" class="text-6xl md:text-8xl font-bold text-white font-orbitron" data-text="COREOFLORE"></h1>
             <div class="mt-12 flex justify-center space-x-8">
-                <a href="https://www.instagram.com/core0flore" target="_blank" class="home-social-icon" aria-label="Instagram"><i class="fab fa-instagram fa-3x"></i></a>
-                <a href="https://discordapp.com/users/762256902025248768" target="_blank" class="home-social-icon" aria-label="Discord"><i class="fab fa-discord fa-3x"></i></a>
-                <a href="https://www.youtube.com/@COreoflre" target="_blank" class="home-social-icon" aria-label="YouTube"><i class="fab fa-youtube fa-3x"></i></a>
-                <a href="https://steamcommunity.com/profiles/76561199083735531" target="_blank" class="home-social-icon" aria-label="Steam"><i class="fab fa-steam fa-3x"></i></a>
+                <a href="https://www.instagram.com/core0flore" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="Instagram"><i class="fab fa-instagram fa-3x"></i></a>
+                <a href="https://discordapp.com/users/762256902025248768" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="Discord"><i class="fab fa-discord fa-3x"></i></a>
+                <a href="https://www.youtube.com/@COreoflre" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="YouTube"><i class="fab fa-youtube fa-3x"></i></a>
+                <a href="https://steamcommunity.com/profiles/76561199083735531" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="Steam"><i class="fab fa-steam fa-3x"></i></a>
             </div>
         </div>
     </section>
@@ -266,19 +305,19 @@
         <div class="container mx-auto px-6">
             <h1 class="text-4xl font-bold text-center text-white font-orbitron mb-12">MY GAMING ARSENAL</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="card game-card" onclick="openModal('War Thunder', 'CoreOfLore#1', '700 Hours+', 'Playing for 3 years')">
+                <div class="card game-card" onmouseover="debouncedHoverSound()" onclick="playClickSound(); openModal('War Thunder', 'CoreOfLore#1', '700 Hours+', 'Playing for 3 years', 'miVz9nsMYEw')">
                     <img src="https://cdn.akamai.steamstatic.com/steam/apps/236390/header.jpg" alt="War Thunder">
                     <div class="game-card-title">War Thunder</div>
                 </div>
-                <div class="card game-card" onclick="openModal('World of Tanks Blitz', '[Redacted]', '1500 Hours+', 'Playing for 8 years')">
+                <div class="card game-card" onmouseover="debouncedHoverSound()" onclick="playClickSound(); openModal('World of Tanks Blitz', '[Redacted]', '1500 Hours+', 'Playing for 8 years', 'GPtWkLbhQ8Q')">
                     <img src="https://cdn.akamai.steamstatic.com/steam/apps/444200/header.jpg" alt="World of Tanks Blitz">
                     <div class="game-card-title">World of Tanks Blitz</div>
                 </div>
-                <div class="card game-card" onclick="openModal('Valorant', 'coreoflore#4005', 'Unknown', 'Playing for 3 years')">
+                <div class="card game-card" onmouseover="debouncedHoverSound()" onclick="playClickSound(); openModal('Valorant', 'coreoflore#4005', 'Unknown', 'Playing for 3 years', 'e_E9W2vsRbQ')">
                     <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/co2mvt.jpg" alt="Valorant">
                     <div class="game-card-title">Valorant</div>
                 </div>
-                <div class="card game-card" onclick="openModal('Elden Ring', 'coreoflore', 'Entire Life', 'Playing from birth')">
+                <div class="card game-card" onmouseover="debouncedHoverSound()" onclick="playClickSound(); openModal('Elden Ring', 'coreoflore', 'Entire Life', 'Playing from birth', 'E3Huy2cdih0')">
                     <img src="https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg" alt="Elden Ring">
                     <div class="game-card-title">Elden Ring</div>
                 </div>
@@ -303,23 +342,23 @@
         <div class="container mx-auto px-6">
             <h1 class="text-4xl font-bold text-center text-white font-orbitron mb-12">LANGUAGES I KNOW</h1>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 max-w-5xl mx-auto">
-                <div class="card skill-card">
+                <div class="card skill-card" onmouseover="debouncedHoverSound()">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML5 Logo">
                     <div class="skill-card-name">HTML</div>
                 </div>
-                <div class="card skill-card">
+                <div class="card skill-card" onmouseover="debouncedHoverSound()">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS3 Logo">
                     <div class="skill-card-name">CSS</div>
                 </div>
-                <div class="card skill-card">
+                <div class="card skill-card" onmouseover="debouncedHoverSound()">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript Logo">
                     <div class="skill-card-name">JavaScript</div>
                 </div>
-                <div class="card skill-card">
+                <div class="card skill-card" onmouseover="debouncedHoverSound()">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo">
                     <div class="skill-card-name">Python</div>
                 </div>
-                <div class="card skill-card">
+                <div class="card skill-card" onmouseover="debouncedHoverSound()">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Lua-Logo.svg" alt="Lua Logo">
                     <div class="skill-card-name">Lua</div>
                 </div>
@@ -333,10 +372,10 @@
             <h1 class="text-4xl font-bold text-white font-orbitron mb-4">CONNECT WITH ME</h1>
             <p class="text-lg text-gray-400 mb-8">Find me on these platforms</p>
             <div class="mt-8 flex justify-center space-x-8">
-                <a href="https://www.instagram.com/core0flore" target="_blank" class="home-social-icon" aria-label="Instagram"><i class="fab fa-instagram fa-3x"></i></a>
-                <a href="https://discordapp.com/users/762256902025248768" target="_blank" class="home-social-icon" aria-label="Discord"><i class="fab fa-discord fa-3x"></i></a>
-                <a href="https://www.youtube.com/@COreoflre" target="_blank" class="home-social-icon" aria-label="YouTube"><i class="fab fa-youtube fa-3x"></i></a>
-                <a href="https://steamcommunity.com/profiles/76561199083735531" target="_blank" class="home-social-icon" aria-label="Steam"><i class="fab fa-steam fa-3x"></i></a>
+                <a href="https://www.instagram.com/core0flore" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="Instagram"><i class="fab fa-instagram fa-3x"></i></a>
+                <a href="https://discordapp.com/users/762256902025248768" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="Discord"><i class="fab fa-discord fa-3x"></i></a>
+                <a href="https://www.youtube.com/@COreoflre" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="YouTube"><i class="fab fa-youtube fa-3x"></i></a>
+                <a href="https://steamcommunity.com/profiles/76561199083735531" onmouseover="debouncedHoverSound()" onclick="playClickSound()" target="_blank" class="home-social-icon" aria-label="Steam"><i class="fab fa-steam fa-3x"></i></a>
             </div>
              <div class="mt-12 text-lg text-gray-400">
                 <p>Or drop me an email at:</p>
@@ -380,20 +419,74 @@
     <!-- Game Stats Modal -->
     <div id="gameModal" class="modal-backdrop">
         <div class="modal-content">
-            <h2 id="modalTitle" class="text-3xl font-bold font-orbitron mb-4"></h2>
-            <div class="space-y-3 text-lg">
-                <p><strong>In-Game Name:</strong> <span id="modalIGN"></span></p>
-                <p><strong>Total Hours:</strong> <span id="modalHours"></span></p>
-                <p><strong>Playing For:</strong> <span id="modalDuration"></span></p>
+            <div class="modal-video-container">
+                <iframe id="modalVideo" class="modal-video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
-            <button onclick="closeModal()" class="modal-close-button">Close</button>
+            <div class="modal-details-wrapper">
+                <div class="modal-details">
+                    <h2 id="modalTitle" class="text-3xl font-bold font-orbitron mb-4"></h2>
+                    <div class="space-y-3 text-lg">
+                        <p><strong>In-Game Name:</strong> <span id="modalIGN"></span></p>
+                        <p><strong>Total Hours:</strong> <span id="modalHours"></span></p>
+                        <p><strong>Playing For:</strong> <span id="modalDuration"></span></p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="closeModal()" onmouseover="debouncedHoverSound()" class="modal-close-button" aria-label="Close modal">&times;</button>
         </div>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Sound Effects ---
+            const clickSynth = new Tone.MembraneSynth({
+                pitchDecay: 0.01,
+                octaves: 6,
+                envelope: { attack: 0.001, decay: 0.2, sustain: 0.01, release: 0.2 }
+            }).toDestination();
+
+            const hoverSynth = new Tone.Synth({
+                oscillator: { type: 'sine' },
+                envelope: { attack: 0.001, decay: 0.1, sustain: 0.01, release: 0.1 },
+                volume: -20
+            }).toDestination();
+
+            let isAudioReady = false;
+            function initializeAudio() {
+                if (!isAudioReady) {
+                    Tone.start();
+                    isAudioReady = true;
+                }
+            }
+            document.body.addEventListener('mousedown', initializeAudio, { once: true });
+            document.body.addEventListener('touchstart', initializeAudio, { once: true });
+
+
+            window.playClickSound = function() {
+                if (!isAudioReady) return;
+                clickSynth.triggerAttackRelease("C2", "8n");
+            }
+
+            window.playHoverSound = function() {
+                if (!isAudioReady) return;
+                hoverSynth.triggerAttackRelease("G5", "32n");
+            }
+            
+            // Debounce utility to prevent sound from firing too often
+            function debounce(func, delay) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), delay);
+                };
+            }
+
+            // Create a debounced version of the hover sound function
+            window.debouncedHoverSound = debounce(playHoverSound, 100);
+
             // --- Live Background Effect ---
             let scene, camera, renderer, points;
             const container = document.getElementById('live-background');
@@ -462,15 +555,19 @@
 
             // --- Game Modal ---
             const modal = document.getElementById('gameModal');
-            window.openModal = function(title, ign, hours, duration) {
+            const modalVideo = document.getElementById('modalVideo');
+            window.openModal = function(title, ign, hours, duration, videoId) {
                 document.getElementById('modalTitle').innerText = title;
                 document.getElementById('modalIGN').innerText = ign;
                 document.getElementById('modalHours').innerText = hours;
                 document.getElementById('modalDuration').innerText = duration;
+                modalVideo.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&modestbranding=1`;
                 modal.classList.add('visible');
             }
             window.closeModal = function() {
                 modal.classList.remove('visible');
+                // Stop the video from playing in the background
+                modalVideo.src = '';
             }
             modal.addEventListener('click', function(event) {
                 if (event.target === modal) {
