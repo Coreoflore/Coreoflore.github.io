@@ -74,19 +74,21 @@
             color: #00c6ff;
             transform: scale(1.1);
         }
-        .game-card {
+        .card {
             position: relative;
             border-radius: 8px;
             overflow: hidden;
-            cursor: pointer;
             border: 2px solid transparent;
             transition: all 0.3s ease;
             background-color: #111827;
         }
-        .game-card:hover {
+        .card:hover {
             transform: translateY(-10px);
             border-color: #3b82f6;
             box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+        .game-card {
+             cursor: pointer;
         }
         .game-card img {
             width: 100%;
@@ -110,6 +112,35 @@
             font-size: 1.25rem;
             text-align: center;
         }
+        /* New Skill Card Styles */
+        .skill-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            gap: 1rem;
+        }
+        .skill-card img {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
+            filter: grayscale(1);
+            transition: filter 0.3s ease;
+        }
+        .skill-card:hover img {
+            filter: grayscale(0);
+        }
+        .skill-card-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+            color: #9ca3af;
+            transition: color 0.3s ease;
+        }
+        .skill-card:hover .skill-card-name {
+            color: white;
+        }
+
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -183,6 +214,7 @@
                     <a href="#home" class="nav-link">Home</a>
                     <a href="#games" class="nav-link">My Games</a>
                     <a href="#about" class="nav-link">About Me</a>
+                    <a href="#skills" class="nav-link">My Skills</a>
                     <a href="#contact" class="nav-link">Contact</a>
                     <a href="#ai-chat" class="nav-link nav-special">AI Assistant</a>
                 </div>
@@ -208,19 +240,19 @@
         <div class="container mx-auto px-6">
             <h1 class="text-4xl font-bold text-center text-white font-orbitron mb-12">MY GAMING ARSENAL</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="game-card" onclick="openModal('War Thunder', 'CoreOfLore#1', '700 Hours+', 'Playing for 3 years')">
+                <div class="card game-card" onclick="openModal('War Thunder', 'CoreOfLore#1', '700 Hours+', 'Playing for 3 years')">
                     <img src="https://cdn.akamai.steamstatic.com/steam/apps/236390/header.jpg" alt="War Thunder">
                     <div class="game-card-title">War Thunder</div>
                 </div>
-                <div class="game-card" onclick="openModal('World of Tanks Blitz', '[Redacted]', '1500 Hours+', 'Playing for 8 years')">
+                <div class="card game-card" onclick="openModal('World of Tanks Blitz', '[Redacted]', '1500 Hours+', 'Playing for 8 years')">
                     <img src="https://cdn.akamai.steamstatic.com/steam/apps/444200/header.jpg" alt="World of Tanks Blitz">
                     <div class="game-card-title">World of Tanks Blitz</div>
                 </div>
-                <div class="game-card" onclick="openModal('Valorant', 'coreoflore#4005', 'Unknown', 'Playing for 3 years')">
+                <div class="card game-card" onclick="openModal('Valorant', 'coreoflore#4005', 'Unknown', 'Playing for 3 years')">
                     <img src="https://images.igdb.com/igdb/image/upload/t_cover_big/co2mvt.jpg" alt="Valorant">
                     <div class="game-card-title">Valorant</div>
                 </div>
-                <div class="game-card" onclick="openModal('Elden Ring', 'coreoflore', 'Entire Life', 'Playing from birth')">
+                <div class="card game-card" onclick="openModal('Elden Ring', 'coreoflore', 'Entire Life', 'Playing from birth')">
                     <img src="https://cdn.akamai.steamstatic.com/steam/apps/1245620/header.jpg" alt="Elden Ring">
                     <div class="game-card-title">Elden Ring</div>
                 </div>
@@ -236,6 +268,35 @@
                 <p class="text-lg leading-relaxed text-gray-300">
                     I'm a BCA student and a massive tank enthusiast—there's just something about historical armor that fascinates me. I absolutely love cats, and I firmly believe that the beauty of space is unparalleled here on Earth. When I'm not studying or gaming, you can usually find me listening to a mix of artists like Akon, 1nonly, and Bill Withers.
                 </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- My Skills Section -->
+    <section id="skills" class="relative z-10 py-20 scroll-mt-16">
+        <div class="container mx-auto px-6">
+            <h1 class="text-4xl font-bold text-center text-white font-orbitron mb-12">TECHNOLOGIES I USE</h1>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 max-w-5xl mx-auto">
+                <div class="card skill-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/61/HTML5_logo_and_wordmark.svg" alt="HTML5 Logo">
+                    <div class="skill-card-name">HTML</div>
+                </div>
+                <div class="card skill-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/CSS3_logo_and_wordmark.svg" alt="CSS3 Logo">
+                    <div class="skill-card-name">CSS</div>
+                </div>
+                <div class="card skill-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript Logo">
+                    <div class="skill-card-name">JavaScript</div>
+                </div>
+                <div class="card skill-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo">
+                    <div class="skill-card-name">Python</div>
+                </div>
+                <div class="card skill-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Lua-Logo.svg" alt="Lua Logo">
+                    <div class="skill-card-name">Lua</div>
+                </div>
             </div>
         </div>
     </section>
@@ -392,7 +453,6 @@
             const chatForm = document.getElementById('chat-form');
             chatForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                // This alert is a placeholder since the chat is disabled.
                 alert('AI Assistant is currently in development.');
             });
             
